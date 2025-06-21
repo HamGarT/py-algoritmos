@@ -1,0 +1,103 @@
+Algoritmo LadronCasas
+    Definir casas Como Entero
+    Definir n, i, j Como Entero
+    Definir botin_maximo Como Entero
+    Definir casas_vistas Como Entero
+    Definir opcion1, opcion2 Como Entero
+    Definir max_botin Como Entero
+    Definir num_casas_vistas Como Entero
+    
+    n <- 6
+    Dimension casas[n]
+    casas[1] <- 3
+    casas[2] <- 4
+    casas[3] <- 8
+    casas[4] <- 0
+    casas[5] <- -1
+    casas[6] <- 9
+    
+    Escribir "Casas con sus respectivos botines:"
+    Para i <- 1 Hasta n Hacer
+        Escribir Sin Saltar casas[i], " "
+    FinPara
+    Escribir ""
+    
+    Si n = 0 Entonces
+        max_botin <- 0
+        num_casas_vistas <- 0
+    SiNo
+        Si n = 1 Entonces
+            max_botin <- casas[1]
+            num_casas_vistas <- 1
+            Dimension casas_vistas[1]
+            casas_vistas[1] <- 1
+        SiNo
+            Dimension botin_maximo[n]
+            
+            botin_maximo[1] <- casas[1]
+            
+            Si casas[2] > casas[1] Entonces
+                botin_maximo[2] <- casas[2]
+            SiNo
+                botin_maximo[2] <- casas[1]
+            FinSi
+            
+            Para i <- 3 Hasta n Hacer
+                opcion1 <- botin_maximo[i-1]
+                opcion2 <- botin_maximo[i-2] + casas[i]
+                
+                Si opcion2 > opcion1 Entonces
+                    botin_maximo[i] <- opcion2
+                SiNo
+                    botin_maximo[i] <- opcion1
+                FinSi
+            FinPara
+            
+            max_botin <- botin_maximo[n]
+            Dimension casas_vistas[n]  
+            num_casas_vistas <- 0
+            i <- n
+            
+            Mientras i >= 1 Hacer
+                Si i = 1 Entonces
+                    num_casas_vistas <- num_casas_vistas + 1
+                    casas_vistas[num_casas_vistas] <- i
+                    i <- 0 
+                SiNo
+                    Si i = 2 Entonces
+                        Si casas[2] > casas[1] Entonces
+                            num_casas_vistas <- num_casas_vistas + 1
+                            casas_vistas[num_casas_vistas] <- 2
+                        SiNo
+                            num_casas_vistas <- num_casas_vistas + 1
+                            casas_vistas[num_casas_vistas] <- 1
+                        FinSi
+                        i <- 0  
+                    SiNo
+                        Si botin_maximo[i-2] + casas[i] > botin_maximo[i-1] Entonces
+                            num_casas_vistas <- num_casas_vistas + 1
+                            casas_vistas[num_casas_vistas] <- i
+                            i <- i - 2
+                        SiNo
+                            i <- i - 1
+                        FinSi
+                    FinSi
+                FinSi
+            FinMientras
+            Para i <- 1 Hasta trunc(num_casas_vistas / 2) Hacer
+                j <- casas_vistas[i]
+                casas_vistas[i] <- casas_vistas[num_casas_vistas - i + 1]
+                casas_vistas[num_casas_vistas - i + 1] <- j
+            FinPara
+        FinSi
+    FinSi
+    Escribir "El botín máximo que se puede robar es: ", max_botin
+    Escribir "Botines robados:"
+    
+    Para i <- 1 Hasta num_casas_vistas Hacer
+        Si casas[casas_vistas[i]] > 0 Entonces
+            Escribir "Botín: ", casas[casas_vistas[i]], " - Índice: ", casas_vistas[i]
+        FinSi
+    FinPara
+    
+FinAlgoritmo
